@@ -1,9 +1,9 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 export async function refresh(request: FastifyRequest, reply: FastifyReply) {
-  await request.jwtVerify({ onlyCookie: true })
+  await request.jwtVerify({ onlyCookie: true });
 
-  const { role } = request.user
+  const { role } = request.user;
 
   const token = await reply.jwtSign(
     { role },
@@ -12,7 +12,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
         sub: request.user.sub,
       },
     },
-  )
+  );
 
   const refreshToken = await reply.jwtSign(
     { role },
@@ -22,7 +22,7 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
         expiresIn: '7d',
       },
     },
-  )
+  );
 
   return reply
     .setCookie('refreshToken', refreshToken, {
@@ -34,5 +34,5 @@ export async function refresh(request: FastifyRequest, reply: FastifyReply) {
     .status(200)
     .send({
       token,
-    })
+    });
 }
